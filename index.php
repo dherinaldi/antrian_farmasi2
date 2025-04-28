@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Antrian Farmasi</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0f2f1; margin: 0; padding: 0; }
+        .container { display: flex; justify-content: space-around; padding: 20px; }
+        .column {
+            background: #00695c;
+            padding: 15px;
+            border-radius: 15px;
+            width: 30%;
+            color: white;
+            min-height: 80vh;
+        }
+        .column h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .item {
+            background: #26a69a;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .status-belum { background-color: #ff7043; }
+        .status-dilayani { background-color: #ffee58; color: #000; }
+        .status-selesai { background-color: #66bb6a; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="column" id="belum_diterima">
+        <h2>Belum Diterima</h2>
+    </div>
+    <div class="column" id="dilayani">
+        <h2>Dilayani</h2>
+    </div>
+    <div class="column" id="selesai">
+        <h2>Selesai</h2>
+    </div>
+</div>
+
+<script>
+function loadAntrian() {
+    fetch('get_antrian.php')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('belum_diterima').innerHTML = '<h2>Belum Diterima</h2>';
+            document.getElementById('dilayani').innerHTML = '<h2>Dilayani</h2>';
+            document.getElementById('selesai').innerHTML = '<h2>Selesai</h2>';
+
+            data.belum_diterima.forEach(item => {
+                document.getElementById('belum_diterima').innerHTML += `<div class="item status-belum">${item.NORM} ${item.NAMA}<br>${item.TANGGAL}</div>`;
+            });
+
+            data.dilayani.forEach(item => {
+                document.getElementById('dilayani').innerHTML += `<div class="item status-dilayani">${item.NORM} ${item.NAMA}<br>${item.TANGGAL}</div>`;
+            });
+
+            data.selesai.forEach(item => {
+                document.getElementById('selesai').innerHTML += `<div class="item status-selesai">${item.NORM} ${item.NAMA}<br>${item.TANGGAL}</div>`;
+            });
+        });
+}
+
+// Jalankan load setiap 5 detik
+setInterval(loadAntrian, 5000);
+
+// Pertama kali load
+loadAntrian();
+</script>
+
+</body>
+</html>
