@@ -3,7 +3,7 @@
 
 //ubah disini untuk koneksinya 
 $host = "192.168.100.110";
-$user = "admin";
+$user = "simrsgos";
 $pass = "S!MRSGos2";
 $db = "regonline";
 
@@ -14,25 +14,35 @@ if ($koneksi->connect_error) {
 }
 
 #getOrderFarmasi
-$query_order = "SELECT k.NOPEN, DATE_FORMAT(or2.TANGGAL, '%d-%m-%Y %H:%i:%s') AS TANGGAL, p.NORM, p2.NAMA
+$query_order = "SELECT k.NOPEN, DATE_FORMAT(or2.TANGGAL, '%d-%m-%Y %H:%i:%s') AS TANGGAL, LPAD(p.NORM, 6, '0') NORM,CONCAT(
+    SUBSTRING(p2.NAMA, 1, 2), 
+    REPEAT('*', LENGTH(p2.NAMA) - 3), 
+    RIGHT(p2.NAMA, 1)
+  ) NAMA
 	FROM layanan.order_resep or2
 	LEFT JOIN `pendaftaran`.kunjungan k ON k.NOMOR = or2.KUNJUNGAN
 	LEFT JOIN `pendaftaran`.pendaftaran p ON p.NOMOR = k.NOPEN
 	LEFT JOIN `master`.pasien p2 ON p.NORM = p2.NORM
 	LEFT JOIN `master`.ruangan r ON r.ID = k.RUANGAN
 	WHERE or2.TUJUAN = 103010201 AND or2.STATUS = 1
-    AND DATE(or2.TANGGAL) = DATE(NOW())   
+    AND DATE(or2.TANGGAL) = DATE(NOW())
+	GROUP BY k.NOPEN   
 	ORDER BY k.MASUK DESC";
 $result_order = $koneksi->query($query_order); 
 
 #getKunjunganFarmasi status 1
- $query_kunjungan = "SELECT k.NOPEN, DATE_FORMAT(k.MASUK, '%d-%m-%Y %H:%i:%s') AS TANGGAL, p.NORM, p2.NAMA
+ $query_kunjungan = "SELECT k.NOPEN, DATE_FORMAT(k.MASUK, '%d-%m-%Y %H:%i:%s') AS TANGGAL, LPAD(p.NORM, 6, '0') NORM, CONCAT(
+    SUBSTRING(p2.NAMA, 1, 2), 
+    REPEAT('*', LENGTH(p2.NAMA) - 3), 
+    RIGHT(p2.NAMA, 1)
+  ) NAMA
 	FROM pendaftaran.kunjungan k
 	LEFT JOIN `pendaftaran`.pendaftaran p ON p.NOMOR = k.NOPEN
 	LEFT JOIN `master`.pasien p2 ON p.NORM = p2.NORM
 	LEFT JOIN `master`.ruangan r ON r.ID = k.RUANGAN
 	WHERE k.RUANGAN = 103010201 AND k.STATUS = 1
     AND DATE(k.MASUK) = DATE(NOW())
+	GROUP BY k.NOPEN
     ORDER BY k.MASUK DESC limit 10";
 
 $result_kunjungan = $koneksi->query($query_kunjungan); 
@@ -44,13 +54,18 @@ $data = [
 ];
 
 #getKunjunganFarmasi status 2
-$query_kunjungan_sel = "SELECT k.NOPEN, DATE_FORMAT(k.MASUK, '%d-%m-%Y %H:%i:%s') AS TANGGAL, p.NORM, p2.NAMA
+$query_kunjungan_sel = "SELECT k.NOPEN, DATE_FORMAT(k.MASUK, '%d-%m-%Y %H:%i:%s') AS TANGGAL, LPAD(p.NORM, 6, '0') NORM, CONCAT(
+    SUBSTRING(p2.NAMA, 1, 2), 
+    REPEAT('*', LENGTH(p2.NAMA) - 3), 
+    RIGHT(p2.NAMA, 1)
+  ) NAMA
 FROM pendaftaran.kunjungan k
 LEFT JOIN `pendaftaran`.pendaftaran p ON p.NOMOR = k.NOPEN
 LEFT JOIN `master`.pasien p2 ON p.NORM = p2.NORM
 LEFT JOIN `master`.ruangan r ON r.ID = k.RUANGAN
 WHERE k.RUANGAN = 103010201 AND k.STATUS = 2
-AND DATE(k.MASUK) = DATE(NOW())  
+AND DATE(k.MASUK) = DATE(NOW())
+GROUP BY k.NOPEN  
 ORDER BY k.MASUK DESC limit 10";
 
 $result_kunjungan_sel = $koneksi->query($query_kunjungan_sel); 

@@ -51,6 +51,15 @@
 </div>
 
 <script>
+
+function sensorNama(nama) {
+    if (nama.length <= 2) return nama; // Tidak cukup panjang untuk disensor
+    const awal = nama.slice(0, 2);        // Ambil 2 huruf pertama
+    const akhir = nama.slice(-1);         // Ambil 1 huruf terakhir
+    const tengah = '*'.repeat(nama.length - 3); // Bintang sesuai panjang
+    return awal + tengah + akhir;
+}
+
 function loadAntrian() {
     fetch('get_antrian.php')
         .then(response => response.json())
@@ -73,8 +82,8 @@ function loadAntrian() {
         });
 }
 
-// Jalankan load setiap 5 detik
-setInterval(loadAntrian, 5000);
+// Jalankan load setiap 15 detik
+setInterval(loadAntrian, 15000);
 
 // Pertama kali load
 loadAntrian();
