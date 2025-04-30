@@ -36,7 +36,7 @@ $query_order = "SELECT k.NOPEN, DATE_FORMAT(or2.TANGGAL, '%d-%m-%Y %H:%i:%s') AS
     LEFT JOIN layanan.order_detil_resep odr ON odr.ORDER_ID = or2.NOMOR
 	WHERE or2.TUJUAN = 103010201 AND or2.STATUS = 1
     -- AND DATE(or2.TANGGAL) = DATE(NOW())
-    AND DATE(or2.TANGGAL) between '2025-04-20 00:00:00' and '2025-04-29 23:59:59'
+    AND DATE(or2.TANGGAL) between '2025-04-20 00:00:00' and NOW()
 	GROUP BY k.NOPEN
 	ORDER BY k.MASUK DESC";
 
@@ -54,7 +54,7 @@ $query_kunjungan = "SELECT k.NOPEN, DATE_FORMAT(k.MASUK, '%d-%m-%Y %H:%i:%s') AS
 	LEFT JOIN `master`.ruangan r ON r.ID = k.RUANGAN
 	WHERE k.RUANGAN = 103010201 AND k.STATUS = 1
     -- AND DATE(k.MASUK) = DATE(NOW())
-    AND DATE(k.MASUK) between '2025-04-20 00:00:00' and '2025-04-29 23:59:59'
+    AND DATE(k.MASUK) between '2025-04-20 00:00:00' and NOW()
 	GROUP BY k.NOPEN
     ORDER BY k.MASUK DESC limit 10";
 
@@ -76,11 +76,19 @@ FROM pendaftaran.kunjungan k
 LEFT JOIN `pendaftaran`.pendaftaran p ON p.NOMOR = k.NOPEN
 LEFT JOIN `master`.pasien p2 ON p.NORM = p2.NORM
 LEFT JOIN `master`.ruangan r ON r.ID = k.RUANGAN
+LEFT JOIN (
+    SELECT COALESCE(COUNT(tar.ID),0) AS C_TELAAH, tar.RESEP
+    FROM layanan.telaah_awal_resep tar
+    GROUP BY tar.RESEP
+) AS c_telaah ON c_telaah.RESEP = k.NOMOR
 WHERE k.RUANGAN = 103010201 AND k.STATUS = 2
 -- AND DATE(k.MASUK) = DATE(NOW())
-AND DATE(k.MASUK) between '2025-04-20 00:00:00' and '2025-04-29 23:59:59'
+AND c_telaah.C_TELAAH < 3 # telaah akhir minimal centang 3 data
+AND DATE(k.MASUK) between '2025-04-20 00:00:00' and NOW()
 GROUP BY k.NOPEN
 ORDER BY k.MASUK DESC limit 10";
+
+//echo $query_kunjungan_sel;
 
 $result_kunjungan_sel = $koneksi->query($query_kunjungan_sel);
 
