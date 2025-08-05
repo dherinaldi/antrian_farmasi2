@@ -1,0 +1,11 @@
+<?php
+return [
+    'cons_id' => '{cons_id_faskes}',
+    'secret_key' => '{secret_key_faskes}',
+    'user_key' => '{user_key_vclaim}',
+    'base_url' => '{base_url_vclaim}',#https://apijkn.bpjs-kesehatan.go.id/vclaim-rest/
+    'user_key_antrol' => '{user_key_antrol}',
+    'base_url_antrol' => '{base_url_antrol}'#https://apijkn.bpjs-kesehatan.go.id/antreanrs/    
+];
+
+
