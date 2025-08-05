@@ -1,16 +1,24 @@
 <?php
-$config = include('config.php');
-include('bpjs_helper.php');
+$config = include 'config.php';
+include 'bpjs_helper.php';
+
+$param = isset($_REQUEST['param']) ? $_REQUEST['param'] : isset($_REQUEST['param']);
+
 #endpoint untuk vclaim
 #$endpoint = "Peserta/nokartu/{$noka}/tglSEP/{$tanggal}";
+if ($param == 'nik') {
+    $response = bpjsRequest('Peserta/nik/3507251902890001/tglSEP/2025-08-05', $config);
+    echo $response;
 
-$response = bpjsRequest('Peserta/nik/3507251902890001/tglSEP/2025-08-05', $config);
+} else if ($param == 'rujukan') {
+    $norujukan = isset($_REQUEST['norujukan']) ? $_REQUEST['norujukan'] : '0187B0290425Y001952';    
+    $response = bpjsRequest('Rujukan/RS/{$norujukan}', $config);
+    echo $response;
 
-echo $response;
+} else {
 
-
-#post Data untuk antrol
-$postData = '{
+#post Data untuk antrol/HFIS
+    $postData = '{
    "kodebooking": "2211210013",
    "jenispasien": "JKN",
    "nomorkartu": "0002073663292",
@@ -35,5 +43,6 @@ $postData = '{
    "kuotanonjkn": 30,
    "keterangan": "Peserta harap 30 menit lebih awal guna pencatatan administrasi."
 }';
-$response1 = bpjsRequest('antrean/add', $config, 'POST', $postData,'antrol');
-echo $response1;
+    $response1 = bpjsRequest('antrean/add', $config, 'POST', $postData, 'antrol');
+    echo $response1;
+}
