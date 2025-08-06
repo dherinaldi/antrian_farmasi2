@@ -1,10 +1,11 @@
 <?php
-include_once '..\lz\LZString.php';
-include_once '..\lz\LZReverseDictionary.php';
-include_once '..\lz\LZData.php';
-include_once '..\lz\LZUtil.php';
-include_once '..\lz\LZUtil16.php';
-include_once '..\lz\LZContext.php';
+#perbaikan path relative path
+include_once(__DIR__ . '/../lz/LZString.php');
+include_once(__DIR__ . '/../lz/LZReverseDictionary.php');
+include_once(__DIR__ . '/../lz/LZData.php');
+include_once(__DIR__ . '/../lz/LZUtil.php');
+include_once(__DIR__ . '/../lz/LZUtil16.php');
+include_once(__DIR__ . '/../lz/LZContext.php');
 
 function getTimestamp()
 {
