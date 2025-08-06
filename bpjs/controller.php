@@ -6,16 +6,29 @@ $param = isset($_REQUEST['param']) ? $_REQUEST['param'] : isset($_REQUEST['param
 
 #endpoint untuk vclaim
 #$endpoint = "Peserta/nokartu/{$noka}/tglSEP/{$tanggal}";
+$tanggal = date('Y-m-d');
+
 if ($param == 'nik') {
-    $response = bpjsRequest('Peserta/nik/3507251902890001/tglSEP/2025-08-05', $config);
+    $noka = isset($_REQUEST['noka']) ? $_REQUEST['noka'] : '3507240510770001';    
+    $endpoint = "Peserta/nik/$noka/tglSEP/$tanggal";
+    $response = bpjsRequest($endpoint, $config);
     echo $response;
 
 } else if ($param == 'rujukan') {
-    $norujukan = isset($_REQUEST['norujukan']) ? $_REQUEST['norujukan'] : '0187B0290425Y001952';    
-    $response = bpjsRequest('Rujukan/RS/{$norujukan}', $config);
+    $norujukan = isset($_REQUEST['norujukan']) ? $_REQUEST['norujukan'] : '0187B0290425Y001952';
+    $endpoint = "Rujukan/RS/$norujukan";    
+    $response = bpjsRequest($endpoint, $config);
     echo $response;
 
-} else {
+}
+else if ($param == 'noka') {
+    $noka = isset($_REQUEST['noka']) ? $_REQUEST['noka'] : '3507240510770001';    
+    $endpoint = "Peserta/noka/$noka/tglSEP/$tanggal"; 
+    $response = bpjsRequest($endpoint, $config);
+    echo $response;
+
+} 
+else {
 
 #post Data untuk antrol/HFIS
     $postData = '{

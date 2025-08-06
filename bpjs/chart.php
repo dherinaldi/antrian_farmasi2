@@ -103,7 +103,7 @@ let currentInterval = 5000; // default 5 detik
 function startInterval() {
     if (intervalId) clearInterval(intervalId); // stop yang lama
     intervalId = setInterval(() => {
-        fetchResponse('peserta', "../bpjs/controller.php?param=nik&noka=3507251902890001", 0);
+        fetchResponse('peserta', "../bpjs/controller.php?param=nik&noka=3507240510770000", 0);
         fetchResponse('rujukan', "../bpjs/controller.php?param=rujukan", 1);       
     }, currentInterval);
 }

@@ -81,7 +81,7 @@
     <script>
     $(document).ready(function() {
         const urls = {
-            peserta: "../bpjs/controller.php?param=nik",
+            peserta: "../bpjs/controller.php?param=nik&noka=3507240510770000",
             rujukan: "../bpjs/controller.php?param=rujukan",
         };
 
