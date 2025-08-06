@@ -8,10 +8,11 @@ Aplikasi monitoring koneksi endpoint BPJS Kesehatan berbasis web ( VCLAIM DAN AN
 - Log update terakhir
 
 ## Cara Deploy
+
 1. Download / Clone file dari sumber github terdahulu (https://github.com/dherinaldi/antrian_farmasi2/) 
 2. Aktif di folder bpjs 
 3. Duplikasi atau bisa rename config.php.dist menjadi config.php 
-    ```php
+```php    
 <?php
 //Konfigurasi disini
 return [
@@ -23,12 +24,13 @@ return [
     'base_url_antrol' => '{base_url_antrol}'#https://apijkn.bpjs-kesehatan.go.id/antreanrs/    
 ];
 
-```
 Note : Perhatikan cara penulisan base_url dan base_url_antrol 
+```
 
 4. Jalankan Aplikasi untuk dashboard monitoring: `http://{ip_server}/antrian_farmasi2/bpjs/`
 
 5. Jalankan Aplikasi untuk dashboard monitoring chart: `http://{ip_server}/antrian_farmasi2/bpjs/chart.php`
+
 
 ## Teknologi
 - PHP
