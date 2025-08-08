@@ -44,25 +44,44 @@
         <h2 class="text-center mb-4">LIST DISPLAY ANTRIAN ADMISI DAN POLI</h2>
         <div class="row g-4">
 
-            <!-- Card Template -->
-             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card api-card p-3 h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Display Poli 1</h5>
-                        <a href="display.php" class="btn btn-sm btn-success" target="_blank">Show Datas</a>                        
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card api-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-3">Display Poli</h5>
+
+                        <div class="mb-3 flex-grow-1">
+                            <label for="poli" class="form-label">Multiselect (bisa lebih dari 1) </label>
+                            <select class="form-select" name="poli[]" multiple size="5" id="poli">
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="intervalSelect" class="form-label">Interval Pergantian (detik)</label>
+                            <select id="intervalSelect" class="form-select">
+                                <option value="5000">5 Detik</option>
+                                <option value="10000">10 Detik</option>
+                                <option value="15000" selected>15 Detik</option>
+                                <option value="30000">30 Detik</option>
+                                <option value="60000">60 Detik</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <a href="display.php" class="btn btn-sm btn-success mt-auto" target="_blank"
+                                id="tampilBtn1">
+                                Display 1
+                            </a>
+                            <a href="display2.php" class="btn btn-sm btn-success mt-auto" target="_blank"
+                                id="tampilBtn2">
+                                Display 2
+                            </a>
+                        </div>
+                        <div class="mb-3">
+
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card api-card p-3 h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Display Poli 2</h5>
-                        <a href="display2.php" class="btn btn-sm btn-success" target="_blank">Show Datas</a>
-                    </div>
-                </div>
-            </div>
-            
+
             <!-- Tambahkan kartu lain seperti Get SEP, Get Diagnosa, Get Surat Kontrol, dst sesuai gambar -->
         </div>
 
@@ -71,7 +90,56 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-   
+
+    <script>
+    function loadDropdown(selector, jenis, label) {
+        $.ajax({
+            url: 'controller.php',
+            type: 'GET',
+            data: {
+                jenis: jenis,
+                select2: 0
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                let $select = $(selector);
+                $select.empty().append(`<option value="">${label}</option>`);
+                data.forEach(function(item) {
+                    $select.append(`<option value="${item.ID}">${item.DESKRIPSI}</option>`);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(`Gagal load ${label.toLowerCase()}:`, error);
+            }
+        });
+    }
+
+    loadDropdown('#poli', 'poli', ' -- SEMUA Poli --');
+
+
+    document.getElementById("tampilBtn1").addEventListener("click", function(e) {
+        e.preventDefault(); // biar href default nggak jalan
+        const selected = Array.from(document.getElementById("poli").selectedOptions)
+            .map(option => option.value);
+        const interval = document.getElementById("intervalSelect").value;
+
+        const url = "display.php?poli=" + encodeURIComponent(selected.join(",")) + "&interval=" + interval;
+        window.open(url, "_blank");
+    });
+
+    document.getElementById("tampilBtn2").addEventListener("click", function(e) {
+        e.preventDefault();
+        const selected = Array.from(document.getElementById("poli").selectedOptions)
+            .map(option => option.value);
+        const interval = document.getElementById("intervalSelect").value;
+
+        const url = "display2.php?poli=" + encodeURIComponent(selected.join(",")) + "&interval=" + interval;
+        window.open(url, "_blank");
+    });
+    </script>
+    </script>
+
 
 </body>
 

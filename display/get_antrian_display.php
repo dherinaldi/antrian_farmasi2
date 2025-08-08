@@ -9,6 +9,20 @@ include_once(__DIR__ .'/../connect.php');
   ['id' => 4, 'no_antrian' => 4, 'nama_pasien' => 'Dian',   'no_rm' => '0004', 'waktu_kunjungan' => '2025-08-07 17:42:00', 'status' => 'dipanggil', 'poli' => 'ANAK']
 ]; */
 
+$tanggal = isset($_REQUEST['tanggal']) && strtotime($_REQUEST['tanggal'])
+? date('Y-m-d 00:00:00', strtotime($_REQUEST['tanggal']))
+: date('Y-m-d 00:00:00');
+
+$tanggal_akhir = isset($_REQUEST['tanggal_akhir']) && strtotime($_REQUEST['tanggal_akhir'])
+? date('Y-m-d 23:59:59', strtotime($_REQUEST['tanggal_akhir']))
+: date('Y-m-d 23:59:59');
+
+$s_poli = $_REQUEST['poli']? " AND ru.ID in (".$_REQUEST['poli'].")" : '';
+
+#echo $s_poli;
+
+$s_tanggal = "AND pen.TANGGAL BETWEEN '$tanggal' AND '$tanggal_akhir'";
+
 $query = "SELECT antri_ru.RUANGAN POLI,ru.DESKRIPSI NAMA_POLI, antri_ru.TANGGAL TANGGAL_ANTRIAN, antri_ru.NOMOR, antri_ru.JENIS, antri_ru.REF AS NOPEN, antri_ru.`STATUS`,pen.NORM,pen.TANGGAL,pas.NAMA NAMA_PASIEN, kun.NOMOR NOKUN, kun.MASUK, kun.KELUAR, kun.`STATUS` STATUS_KUNJUNGAN , kun.DPJP
 FROM pendaftaran.antrian_ruangan antri_ru
 LEFT JOIN pendaftaran.pendaftaran  pen ON pen.NOMOR = antri_ru.REF
@@ -17,13 +31,17 @@ LEFT JOIN pendaftaran.kunjungan kun ON kun.NOPEN = antri_ru.REF
 LEFT JOIN `master`.ruangan ru ON ru.ID = antri_ru.RUANGAN AND ru.JENIS_KUNJUNGAN IN (1) AND ru.JENIS IN (5)
 WHERE 0 = 0 
 #AND antri_ru.REF IN (2412050003,2506030003,2303290224)
+$s_poli
+$s_tanggal
 AND ru.DESKRIPSI IS NOT NULL 
 AND antri_ru.`STATUS` IN (1,2)
-AND pen.TANGGAL BETWEEN '2025-08-08 00:00:00' AND '2025-08-08 23:59:59'
+
 GROUP BY antri_ru.REF
 ORDER BY pen.TANGGAL DESC
 #LIMIT 10
 ";
+
+#echo $query;
 
 $result = $koneksi->query($query);
 

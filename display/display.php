@@ -129,6 +129,10 @@
     </div>
 
     <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const poli = urlParams.get("poli"); // "102010201,102010202"
+    const interval = urlParams.get("interval"); // "102010201,102010202"
+
     let poliData = {};
     let poliList = [];
     let currentIndex = 0;
@@ -146,7 +150,9 @@
     }
 
     function fetchData() {
-        $.getJSON('get_antrian_display.php', function(data) {
+        $.getJSON("get_antrian_display.php", {
+            poli: poli
+        }, function(data) {
             poliData = data;
             poliList = Object.keys(data);
             showPoli(); // tampilkan pertama kali

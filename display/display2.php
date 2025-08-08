@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Display Antrian Bergilir Poli</title>
@@ -15,6 +16,7 @@
         <h2 class="m-0">DISPLAY ANTRIAN</h2>
         <div><span id="tanggal"></span> - <span id="jam"></span></div>
     </header>
+   <!--  <input type="text" value="" id="inp_poli"> -->
 
     <!-- Konten -->
     <main class="container mt-4">
@@ -39,4 +41,5 @@
 
     <script src="../assets/script.js"></script>
 </body>
+
 </html>
